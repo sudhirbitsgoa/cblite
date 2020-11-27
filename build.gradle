@@ -1,0 +1,21 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+
+
+mainClassName = 'cbliteDesktop.Main'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testImplementation     'junit:junit:4.13'
+    // implementation "com.couchbase.lite:couchbase-lite-java-ee:2.8"
+    implementation  fileTree(include: ['*.jar'], dir: 'cblitejar/cblite2.8.1.6/lib')
+    // implementation 'com.couchbase.lite:couchbase-lite-java-ee:2.8.1'
+}
+
+repositories {
+    maven {url 'https://mobile.maven.couchbase.com/maven2/dev/'}
+}
