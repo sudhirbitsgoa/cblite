@@ -20,6 +20,7 @@ public class Main {
     private static final String SYNC_GATEWAY_URL = "ws://ec2-13-232-14-6.ap-south-1.compute.amazonaws.com:4984/wayship";
     private static final String DB_PATH = new File("").getAbsolutePath() + "/resources";
     static Database database;
+
     public static void main(String[] args) throws CouchbaseLiteException, InterruptedException, URISyntaxException {
         Random RANDOM = new Random();
         int randPtrLang = RANDOM.nextInt(5);
@@ -115,37 +116,76 @@ public class Main {
                 System.err.println("Error code ::  " + change.getStatus().getError().getCode());
             }
         });
+        Main.startReplicationLocal();
+                
 
-        // Start replication.
-        replicator.start(true);
-
-        // Check status of replication and wait till it is completed
-        while (replicator.getStatus().getActivityLevel() != Replicator.ActivityLevel.STOPPED) {
-            Thread.sleep(1000);
-        }
-
-        System.out.println("Finish!");
-
-        System.exit(0);
+//        // Start replication.
+//        replicator.start(true);
+//
+//        // Check status of replication and wait till it is completed
+//        while (replicator.getStatus().getActivityLevel() != Replicator.ActivityLevel.STOPPED) {
+//            Thread.sleep(1000);
+//        }
+//
+//        System.out.println("Finish!");
+//
+//        System.exit(0);
 
     }
 
-    void startReplicationLocal() throws URISyntaxException {
-        Endpoint startpoint = new URLEndpoint(new URI("wss://localhost:8954"));
-        final ReplicatorConfiguration thisConfig
-                = new ReplicatorConfiguration(
-                        database,
-                        startpoint);
+    static void startReplicationLocal() throws URISyntaxException, CouchbaseLiteException, InterruptedException {
+//        Endpoint startpoint = new URLEndpoint(new URI("wss://localhost:8954"));
+//        final ReplicatorConfiguration thisConfig
+//                = new ReplicatorConfiguration(
+//                        database,
+//                        startpoint);
+//
+//        thisConfig.setAcceptOnlySelfSignedServerCertificate(true);
+//
+//        final BasicAuthenticator thisAuth
+//                = new BasicAuthenticator(
+//                        "wayship",
+//                        "wayship");
+//        thisConfig.setAuthenticator(thisAuth);
+//
+//        Replicator replicator = new Replicator(thisConfig);
+//        replicator.start();
 
-        thisConfig.setAcceptOnlySelfSignedServerCertificate(true);
+        // Initialize the listener config
+        final URLEndpointListenerConfiguration thisConfig
+                = new URLEndpointListenerConfiguration(database);
 
-        final BasicAuthenticator thisAuth
-                = new BasicAuthenticator(
-                        "wayship",
-                        "wayship");
-        thisConfig.setAuthenticator(thisAuth);
+        thisConfig.setPort(55990);
 
-        Replicator replicator = new Replicator(thisConfig);
-        replicator.start();
+        thisConfig.setNetworkInterface("0.0.0.0");
+
+        thisConfig.setEnableDeltaSync(false);
+        thisConfig.setDisableTls(true);
+        // Configure server security
+
+        // Use an Anonymous Self-Signed Cert
+        thisConfig.setTlsIdentity(null);
+
+        // Configure Client Security using an Authenticator
+        // For example, Basic Authentication
+        char[] charArray ={ 'w', 'a', 'y', 's', 'h', 'i', 'p' }; 
+        thisConfig.setAuthenticator(new ListenerPasswordAuthenticator(
+                (validUser, validPassword)
+                -> "wayship".equals(validUser)
+                && Arrays.equals(charArray, validPassword)));
+
+        // Initialize the listener
+        final URLEndpointListener thisListener
+                = new URLEndpointListener(thisConfig);
+
+        // Start the listener
+        thisListener.start();
+        int connectionCount;
+        connectionCount = thisListener.getStatus().getConnectionCount();
+        while(connectionCount > -1) {
+            System.out.println("The total connections "+ connectionCount);
+            Thread.sleep(1000);
+        }
+        System.out.println("Finish");
     }
 }
