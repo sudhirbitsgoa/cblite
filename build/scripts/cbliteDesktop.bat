@@ -82,7 +82,7 @@ set CMD_LINE_ARGS=%*
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\cbliteDesktop.jar;%APP_HOME%\lib\okio-1.17.2.jar;%APP_HOME%\lib\couchbase-lite-java-ee-2.8.1-6.jar;%APP_HOME%\lib\okhttp-3.14.7.jar
+set CLASSPATH=%APP_HOME%\lib\cbliteDesktop.jar;%APP_HOME%\lib\couchbase-lite-java-ee-2.8.1-6.jar;%APP_HOME%\lib\okhttp-3.14.7.jar;%APP_HOME%\lib\okio-1.17.2.jar
 
 @rem Execute cbliteDesktop
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CBLITE_DESKTOP_OPTS%  -classpath "%CLASSPATH%" cbliteDesktop.Main %CMD_LINE_ARGS%

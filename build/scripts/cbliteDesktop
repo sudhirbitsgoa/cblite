@@ -80,7 +80,7 @@ case "`uname`" in
     ;;
 esac
 
-CLASSPATH=$APP_HOME/lib/cbliteDesktop.jar:$APP_HOME/lib/okio-1.17.2.jar:$APP_HOME/lib/couchbase-lite-java-ee-2.8.1-6.jar:$APP_HOME/lib/okhttp-3.14.7.jar
+CLASSPATH=$APP_HOME/lib/cbliteDesktop.jar:$APP_HOME/lib/couchbase-lite-java-ee-2.8.1-6.jar:$APP_HOME/lib/okhttp-3.14.7.jar:$APP_HOME/lib/okio-1.17.2.jar
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then
