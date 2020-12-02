@@ -85,7 +85,7 @@ set CMD_LINE_ARGS=%*
 set CLASSPATH=%APP_HOME%\lib\cbliteDesktop.jar;%APP_HOME%\lib\couchbase-lite-java-ee-2.8.1-6.jar;%APP_HOME%\lib\okhttp-3.14.7.jar;%APP_HOME%\lib\okio-1.17.2.jar
 
 @rem Execute cbliteDesktop
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CBLITE_DESKTOP_OPTS%  -classpath "%CLASSPATH%" cbliteDesktop.Main %CMD_LINE_ARGS%
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CBLITE_DESKTOP_OPTS%  -classpath "%CLASSPATH%" Storage.Main %CMD_LINE_ARGS%
 
 :end
 @rem End local scope for the variables with windows NT shell
